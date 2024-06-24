@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kotas', function (Blueprint $table) {
-            $table->id();
-            $table->String ('Nama_Kota' ,15);
-            $table->String ('Nama_Pemimpin' ,20);
-            $table->Date ('Tgl_Berdiri');
-            $table->Int ('jumlah_penduduk' ,10);
-            $table->Float ('Luas_Wilayah' ,10);
-            $table->String ('Jenis Kota', 15);
-            $table->Text ('Keunggulan'); 
+        Schema::create('kota', function (Blueprint $table) {
+            $table->increments('id_kota'); 
+            $table->string('nama_kota', 15);
+            $table->string('nama_pemimpin', 20);
+            $table->date('tanggal_berdiri');
+            $table->integer('jumlah_penduduk');
+            $table->float('luas_wilayah');
+            $table->enum('status', ['istimawa', 'otonom', 'percontohan']);
+            $table->text('keunggulan');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kotas');
+        Schema::dropIfExists('kota');
     }
 };
