@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use App\Models\Kota;
+
 
 class KotaController extends Controller
 {
     public function index () {
         $listKota = Kota::get();
-        return view('kota.index',compact('$listKota'));
+        return view('kota.index',compact('listKota'))->with('i');;
     }
 
     public function showFormAdd(){
@@ -33,12 +35,12 @@ class KotaController extends Controller
     }
 
     public function showFormEdit (int $id) {
-        $listKota = Kota::where('id_kota',$id)->get();
-        return view('kota.edit',compact('$listKota'));
+        $listKota = Kota::findOrFail($id);
+        return view('kota.edit',compact('listKota'));
     }
 
     public function proccesEdit(Request $request,int $id){
-        $kota = Kota::where('id_kota',$id)->get();
+        $kota =  Kota::findOrFail($id);
 
 
         $kota->update([
@@ -55,13 +57,25 @@ class KotaController extends Controller
         ->with('success', 'kota Berhasil Di tambahkan');
     }
 
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
-        $dataMesin = Kota::where('id_kota', '=', $id);
+        $dataKota =  Kota::findOrFail($id);
 
-        $dataMesin->delete();
+        $dataKota->delete();
         return redirect()->route('list-kota')
             ->with('success', 'kota Berhasil Di hapus');
+    }
+
+    public function downloadPdf()
+    {
+        $listKota = Kota::all(); // Ambil semua data kota dari model
+    
+        $data = [
+            'listKota' => $listKota,
+        ];
+    
+        $pdf = PDF::loadView('pdf.invoice', $data); // Load view 'pdf.invoice' dengan data yang telah Anda siapkan
+        return $pdf->download('invoice.pdf'); // Download PDF dengan nama 'invoice.pdf'
     }
     
 }

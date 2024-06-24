@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('tanggal_berdiri');
             $table->integer('jumlah_penduduk');
             $table->float('luas_wilayah');
-            $table->enum('status', ['istimawa', 'otonom', 'percontohan']);
+            $table->enum('jenis_kota', ['istimawa', 'otonom', 'percontohan']);
             $table->text('keunggulan');
             $table->timestamps();
         });
